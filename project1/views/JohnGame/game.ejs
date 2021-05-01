@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+#wrapper{
+    background: url("/johngame/images/backbg.jpg");
+    background-size: 1200px 800px;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+}
+#info{
+    height: 100px;
+    opacity: 0.7;
+}
+#score{
+    font-size: 50px;
+    text-align: center;
+    opacity: 0.8;
+    float: left;
+    font-family: 'Black Han Sans', sans-serif;
+    color: white;
+}
+#bossBar{
+    width: 1000px;
+    height: 100px;
+    bottom: -30px;
+    left: 100px;
+    margin: auto;
+    position: absolute;
+    overflow: hidden;
+}
+
+</style>
+<script src="/johngame/js/coffee.js"></script>
+<script src="/johngame/js/Hp.js"></script>
+<script src="/johngame/js/Bullet.js"></script>
+<script src="/johngame/js/lib.js"></script>
+<script src="/johngame/js/Enemy.js"></script>
+<script src="/johngame/js/BossBar.js"></script>
+<script src="/johngame/js/bossicon.js"></script>
+<script src="/johngame/js/Boss.js"></script>
+<script src="/johngame/js/howler.js"></script>
+<script>
+var wrapper;
+var info;
+var coffee;
+var bgX=0;
+var loopFlag=true;
+var speed=5;
+var bulletArray=new Array();
+var bulletsrcArray=["missile1.png","missile2.png"];
+var weaponIndex=0;
+var enemyArray=[];
+var enemySrc=["enemy1.webp", "enemy2.webp", "enemy3.webp", "enemy4.webp", "enemy5.webp", "enemy6.webp"];
+var speed=5;
+var count=0;
+var loopFlag=true;
+var hpArray=[];
+var score=0;
+var bossBar;
+var bossicon;
+var boss;
+var bossCount=0;
+var deathCount=0;
+var gameInterval;
+
+function init(){
+    wrapper = document.getElementById("wrapper");
+    wrapper.style.width="1200px"
+    wrapper.style.height="800px"
+    info = document.getElementById("info");
+    bossBar = document.getElementById("bossBar");
+    
+    createHero();
+    createHp();
+    createBar();
+    createBossIcon();
+
+    document.body.addEventListener("keyup", function(){
+        PressUp();
+    });
+    document.body.addEventListener("keydown", function(){
+        PressDown();
+    });
+
+    var sound = new Howl({
+        src: ['/johngame/sound/Entire.mp3'],
+        autoplay: true,
+        loop: true,
+        volume: 0.3,
+        onend: function() {
+            console.log('Finished!');
+        }
+    });
+    sound.play();
+    
+}
+function createHero(){
+    //constructor(container, src, width, height, x, y, velX, velY)
+    coffee = new Coffee(wrapper, "/johngame/images/hero.png", 60,60,100,200,0,0);
+}
+//container, src, width, height, x, y
+function createHp(){
+    for(var i=0;i<4;i++){
+        var hp = new Hp(info, "/johngame/images/heart.webp", 80,80,i*85,0);
+        hpArray.push(hp);
+    }
+}
+function fire(){
+    var bullet = new Bullet(wrapper, "/johngame/images/"+bulletsrcArray[weaponIndex],25,25,coffee.x+coffee.width,coffee.y+(coffee.height/2)-8,10,0);
+    bulletArray.push(bullet);
+}
+function createEnemy(){
+    for(var i=0;i<enemySrc.length;i++){ 
+        //container, src, width, height, x, y, velX,velY
+        var enemy = new Enemy(wrapper, "/johngame/images/"+enemySrc[i],60,40,parseInt(screen.width)-50,200+60*i,getRandom(-5)-1,getRandom(4)-2);
+        enemyArray.push(enemy)
+    }
+}
+function createBossIcon(){
+    //container, src, width, height, x, y, velX, velY
+    bossicon = new BossIcon(bossBar, "/johngame/images/boss.png", 40,40,100,0,5);
+}
+function createBoss(){
+    //container, src, width, height, x, y, velX,velY
+    boss = new Boss(wrapper, "/johngame/images/boss.png", 300,300,parseInt(screen.width)-50,200+60,getRandom(-20)-1,getRandom(16)-2)
+}
+function createBar(){
+    //container, src, width, height, x, y
+    var boss = new BossBar(bossBar, "/johngame/images/bossbar.png", 900,40,0,0);
+}
+function printScore(){
+    var scoreBox=document.getElementById("score");
+    scoreBox.innerText="score: "+score;
+    if(score>=3000){
+        score=score+(hpArray.length*10)
+        scoreBox.style.fontSize="150px";
+        scoreBox.style.textAlign="center";
+        scoreBox.style.color="white";
+        scoreBox.innerHTML="CLEAR\nscore: "+score;
+        if(document.getElementById("noId")==null) {
+            // 랭킹등록
+            var xhttp = new XMLHttpRequest();//비동기 객체 생성
+            //이벤트 처리
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.responseText == "notReach") {// 점수갱신 실패시 보이기
+                        if (confirm("Game Over \n 최고점수 갱신 실패 \n retry?")) {
+                            location.reload();
+                        }
+                    } else {
+                        if (confirm("Game Over \n 최고점수 달성!!! \n retry?")) {
+                            location.reload();
+                        }
+                    }
+                }
+            }
+            xhttp.open("POST", "/updaterank", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            let postBody = "score=" + score + "&game=sc";
+            xhttp.send(postBody);
+        }
+        clearInterval(gameInterval);
+    }
+
+}
+function PressUp(){
+    switch(event.keyCode){
+        case 39:coffee.velX=0;break;
+        case 37:coffee.velX=0;break;
+        case 40:coffee.velY=0;break;
+        case 38:coffee.velY=0;break;
+    }
+}
+function PressDown(){
+    var key = event.keyCode;
+
+    switch(key){
+        case 39:coffee.velX=speed;break;
+        case 37:coffee.velX=-speed;break;
+        case 40:coffee.velY=speed;break;
+        case 38:coffee.velY=-speed;break;
+        case 65:fire();break;
+        case 27:loopFlag=!loopFlag;break;
+    }
+    coffee.render();
+}
+function speedUp(){
+    speed=15;
+}
+function bgEffect(){
+    bgX--;
+    wrapper.style.backgroundPosition=bgX+"px 0px";
+}
+
+function gameLoop(){
+    printScore();
+    if(loopFlag){ //심장
+        bgEffect();
+        bossicon.move();
+        
+        var bom = enemyArray.length;
+        if(score>=2500){ //2500점
+            for(var i=0;i<bom;i++){
+                wrapper.removeChild(enemyArray[0].img);
+                enemyArray.splice(0,1);
+            }
+            score++;
+            if(bossCount==0){
+                createBoss();
+                bossCount++;
+            }
+            boss.render();
+            boss.tick();
+        }
+
+        coffee.tick();
+        coffee.render();
+        
+        for(var i=0;i<bulletArray.length;i++){
+            bulletArray[i].render();
+            bulletArray[i].tick();     
+        }
+        
+        if(score<=2500){
+            if(count%4000==0){
+                createEnemy();
+            }
+        };
+        
+        for(var i=0;i<enemyArray.length;i++){
+            enemyArray[i].render();
+            enemyArray[i].tick();
+        } 
+        count+=50;
+    }
+}
+window.addEventListener("load", function(){
+    init();
+    gameInterval = setInterval("gameLoop()", 10);
+    
+});
+</script>
+</head>
+<body>
+    <%- include ('../inc/latte_top_navi')%>
+    <div id="wrapper">
+        <div id="info"></div>
+        <div id="score">점수</div>
+        <div id="bossBar">
+            <div id="boss"></div>
+        </div>
+    </div>
+    <%- include ('../inc/latte_footer')%>
+</body>
+</html>

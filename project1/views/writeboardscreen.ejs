@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+  
+body {font-family: Arial, Helvetica, sans-serif; margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+* {box-sizing: border-box;}
+
+input[type=text], textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+textarea content{
+  height: 600px;
+}
+
+input[type=button] {
+  margin-top: 10px;
+  background-color: rgb(211, 153, 83);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px;
+}
+
+input[type=button]:hover {
+  background: rgb(236, 232, 227);
+}
+
+.writeboard_wrapper {
+  height: 800px;
+  width: 1200px;
+  margin: auto;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+#writeboard_title{
+  font-size: 40px;
+  font-family: 'Black Han Sans', sans-serif;
+  color: rgb(235, 205, 171);
+  text-shadow: 2px 2px 4px #000000;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+<script>
+
+   $(function(){ //onLoad 되면..
+
+    //편집기 입히기!!
+    CKEDITOR.replace("content", {
+      height: 500,
+    });
+
+    $($("input[type='button']")[0]).click(function(){ //등록버튼
+      regist();
+    });
+
+    $($("input[type='button']")[1]).click(function(){ //목록버튼
+      getList();
+    });
+
+   });
+
+   function regist(){
+    $("form").attr("action","/screenshot"); //url은 개발자가 정한다, 단 서버랑 짝을 맞추자!!
+    $("form").attr("method","post");
+    $("form").submit(); //전송행위가 발생!
+   }
+
+   function getList(){
+    location.href="/screenshot";
+   }
+
+</script>
+</head>
+<body>
+<!-- 탑 네비게이션 -->
+<%- include ('./inc/latte_top_navi')%>
+
+<div class="writeboard_wrapper">
+  <div id="writeboard_title">글쓰기</div>
+    <form>
+    <input type="text" name="title" placeholder="Title...">
+    <textarea name="content" placeholder="Write something..."></textarea>
+
+    <input type="button" value="등록">
+    <input type="button" value="목록">
+  </form>
+</div>
+
+<!-- Footer -->
+<%- include ('./inc/latte_footer')%>
+</body>
+</html>

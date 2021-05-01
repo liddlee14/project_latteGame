@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABOUT</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+
+#bixBox{
+    width: 1200px;
+    height: 800px;
+    box-sizing: border-box;
+    margin: auto;
+    position: relative;
+}
+#boxSuk{ /* 석호님 */
+    width: 530px;
+    height: 380px;
+    background:url("/HwanGame/img/cd.png");
+    background-repeat:no-repeat;
+    background-Size:530px 350px;
+    left: 40px;
+    top: 30px;
+    position: absolute;
+    opacity: 0.9;
+    font-family:'Noto Sans KR', sans-serif;
+}
+#boxHwan{ /* 정환 */
+    width: 530px;
+    height: 380px;
+    background:url("/HwanGame/img/coffeetail.PNG");
+    background-Size:530px 350px;
+    background-repeat:no-repeat;
+    left: 620px;
+    top: 30px;
+    position: absolute;
+    opacity: 0.9;
+    font-family:'Noto Sans KR', sans-serif;
+}
+#boxEsther{ /* 승언님 */
+    width: 530px;
+    height: 380px;
+    background:url("/HwanGame/img/dgThumb.PNG");
+    background-repeat:no-repeat;
+    background-Size:530px 350px;
+    left: 40px;
+    top: 415px;
+    position: absolute;
+    opacity: 0.9;
+    font-family:'Noto Sans KR', sans-serif;
+}
+#boxJohn{ /* 요한님 */
+    width: 530px;
+    height: 380px;
+    background:url("/HwanGame/img/sky.PNG");
+    background-repeat:no-repeat;
+    background-Size:530px 350px;
+    left: 620px;
+    top: 415px;
+    position: absolute;
+    opacity: 0.9;
+    font-family:'Noto Sans KR', sans-serif;
+}
+h1{
+    text-shadow: 2px 2px 4px rgb(0, 0, 0);
+}
+h3{
+    text-shadow: 2px 2px 4px rgb(0, 0, 0);
+}
+.fontStyle{
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  /* margin: 8px 0; */
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#sukButton {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 30px;
+}
+#hwanButton {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 30px;
+}
+#estherButton {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 30px;
+}
+#johnButton {
+  background-color: red;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 30px;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+#img1{
+    width: 1000px;
+    height: 700px;
+    background:url("/HwanGame/img/note1.png");
+    background-repeat:no-repeat;
+    background-Size:1000px 700px;
+}
+#img2{
+    width: 1000px;
+    height: 700px;
+    background:url("/HwanGame/img/note1.png");
+    background-repeat:no-repeat;
+    background-Size:1000px 700px;
+}
+#img3{
+    width: 1000px;
+    height: 700px;
+    background:url("/HwanGame/img/note1.png");
+    background-repeat:no-repeat;
+    background-Size:1000px 700px;
+}
+#img4{
+    width: 1000px;
+    height: 700px;
+    background:url("/HwanGame/img/note1.png");
+    background-repeat:no-repeat;
+    background-Size:1000px 700px;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0px;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  box-sizing: border-box;
+}
+
+ /* Modal Content/Box */ 
+ .modal-content {
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    width: 53%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 140px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s;
+}
+
+@-webkit-keyframes animatezoom {
+    from {
+        -webkit-transform: scale(0);
+    }
+    to {
+        -webkit-transform: scale(1);
+    }
+}
+
+@keyframes animatezoom {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+#sukDetail{
+    color: #000;
+    font-size: 25px;
+    margin-top: 100px;
+    margin-right: 360px;
+    font-family:'Noto Sans KR', sans-serif;
+}
+
+#hwanDetail{
+    color: #000;
+    font-size: 25px;
+    margin-top: 100px;
+    margin-right: 360px;
+    font-family:'Noto Sans KR', sans-serif;
+}
+
+#estherDetail{
+    color: #000;
+    font-size: 25px;
+    margin-top: 100px;
+    margin-right: 360px;
+    font-family:'Noto Sans KR', sans-serif;
+}
+
+#johnDetail{
+    color: #000;
+    font-size: 25px;
+    margin-top: 100px;
+    margin-right: 360px;
+    font-family:'Noto Sans KR', sans-serif;
+}
+</style>
+<script>
+    // Get the modal
+    var modal = document.getElementById('id01');
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
+</head>
+<body>
+<!-- header -->
+<%- include ('./inc/latte_top_navi.ejs')%>
+
+<!-- body -->
+<div id="bixBox"> <!--타워 꼬리잡기 커콩 슈팅커피 -->
+    <!-- 석호님 -->
+    <div id="boxSuk" onClick="">
+        <div class="fontStyle">
+            <h1 style="color:#FFA500">양&nbsp;&nbsp;&nbsp;석&nbsp;&nbsp;&nbsp;호</h1>
+            <h3 style="color:#FFA500">Cafe&nbsp;Defence</h3>
+            <button id="sukButton" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Click</button>
+        </div>
+    </div>
+    <!-- 석호님님 모달창  -->
+    <div id="id01" class="modal">
+        <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <div id="img1">
+                    <h1>Used Skills</h1>
+                    <!-- 석호님 내용 입력 -->
+                    <div id="sukDetail">
+                        &nbsp;&nbsp;DB 연동 랭킹시스템<br><br>배열을 이용한 강화<br><br>외부 api를 이용한 효과음<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sprite 기법을 이용한 애니메이션<br><br>사거리 체크<br><br>배경음악 변경<br><br>충돌체크
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 정환 -->
+    <div id="boxHwan" onClick="">
+        <div class="fontStyle" >
+            <h1 style="color:#8B4513">지&nbsp;&nbsp;&nbsp;정&nbsp;&nbsp;&nbsp;환</h1>
+            <h3 style="color:#8B4513">Coffee&nbsp;Tail</h3>
+            <button id="hwanButton" onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Click</button>
+        </div>
+    </div>
+    <!-- 정환 모달창  -->
+    <div id="id02" class="modal">
+        <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <div id="img2">
+                    <h1>Used Skills</h1>
+                    <!-- 정환 내용 입력 -->
+                    <div id="hwanDetail">
+                        &nbsp;&nbsp;외부API howler 이용(BG)<br><br>배열<br><br>랜덤<br><br>키보드제어<br><br>루프<br><br>충돌체크<br><br>&nbsp;&nbsp;점수
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 승언님 -->
+    <div id="boxEsther">
+        <div class="fontStyle">
+            <h1 style="color:#9ACD32">이&nbsp;&nbsp;&nbsp;승&nbsp;&nbsp;&nbsp;언</h1>
+            <h3 style="color:#9ACD32"> Dodge&nbsp;It!</h3>
+            <button id="estherButton" onclick="document.getElementById('id03').style.display='block'" style="width:auto;">Click</button>
+        </div>
+    </div>
+     <!-- 승언님 모달창  -->
+     <div id="id03" class="modal">
+        <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <div id="img3">
+                    <h1>Used Skills</h1>
+                    <!-- 승언님 내용 입력 -->
+                    <div id="estherDetail">
+                        &nbsp;&nbsp;&nbsp;&nbsp;외부API howler 이용(BG)<br><br>배열<br><br>랜덤<br><br>키보드제어<br><br>루프<br><br>충돌체크<br><br>점수
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 요한님 -->
+    <div id="boxJohn">
+        <div class="fontStyle">
+            <h1 style="color:#EEE8AA">김&nbsp;&nbsp;&nbsp;요&nbsp;&nbsp;&nbsp;한</h1>
+            <h3 style="color:#EEE8AA">Sky&nbsp;Coffee</h3>
+            <button  id="johnButton" onclick="document.getElementById('id04').style.display='block'" style="width:auto;">Click</button>
+        </div>
+    </div>
+    <!-- 요한님 모달창  -->
+    <div id="id04" class="modal">
+        <form class="modal-content animate" action="/action_page.php" method="post">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <div id="img4">
+                    <h1>Used Skills</h1>
+                    <!-- 요한님 내용 입력 -->
+                    <div id="johnDetail">
+                        &nbsp;&nbsp;&nbsp;일정 점수 도달시 보스 출현<br><br>&nbsp;&nbsp;배열로 랜덤 enemy 생성<br><br>enemy/boss 충돌 체크<br><br>&nbsp;&nbsp;외부API howler 이용(BG)<br><br>키보드 제어<br><br>난이도 어려움<br><br>score 누적
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- footer -->
+<%- include ('./inc/latte_footer.ejs')%>
+</body>
+</html>

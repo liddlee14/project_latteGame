@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>요한이와 라떼들</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+        #wrapper{
+            width: 1200px;
+            height: 800px;
+            box-sizing: border-box;
+            margin: auto;
+            position: relative;
+        }
+        #chat-title{
+            width: 400px;
+            height: 80px;
+            background : none;
+            font-size: 80px;
+            font-family: 'Black Han Sans', sans-serif;
+            font-weight: 300;
+            text-align: center;
+            text-decoration : underline;
+            text-shadow: 2px 2px 4px antiquewhite;
+            
+            top: 10px;
+            left: 400px;
+            position: absolute;
+        }
+        #chat-content{
+            width: 1000px;
+            height: 620px;
+            top: 110px;
+            left: 100px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Noto Sans KR', sans-serif;
+            position: absolute;
+        }
+        #chat-content div{
+            position: relative;
+        }
+        #chat-content input[type=button]{
+            position: absolute;
+            left: 910px;
+            top: 90px;
+            display: inline-block;
+        }
+        #chat-detail{
+            width: 85%;
+            left: 20px;
+            top: 80px;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+            position: absolute;
+        }
+        .comment-list div{
+            display:inline-block; /*block속성(크기 가능)을 유지하되, 공존할수있슴*/
+            border:1px solid burlywood;
+        }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/Comments.js"></script>
+    <script>
+        function addComment(){
+            
+            //화면의 일부만 변경하기 위해(부분변경)서, 백그라운드에서 요청을 시도해 본다 
+            var xhttp = new XMLHttpRequest();//비동기 객체 생성 
+            //이벤트 처리 
+            xhttp.onreadystatechange=function(){
+                if(this.readyState==4 && this.status==200){
+                //서버에서 성공된 응답데이터가 온 시점이다!!
+                    var json=JSON.parse(this.responseText);
+                    if(json.result==0){
+                        alert("댓글 등록실패")
+                    }else{
+                        getCommentsList();
+                    }
+                }     
+            }
+            xhttp.open("POST", "/comments/regist", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            let msg=$("input[name='msg']").val();//댓글 내용
+            let userNum=$("input[name='user_num']").val()
+            var postBody="board_id=1&msg="+msg+"&user_num="+userNum;
+            xhttp.send(postBody);
+        }
+
+        function getCommentsList(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange=function(){
+                if(this.readyState==4 && this.status==200){
+                    var json=JSON.parse(this.responseText);
+                    printCommentsList(json)
+                }
+            }
+            xhttp.open("get", "/comments/list?board_id=1", true);
+            xhttp.send();
+        }
+        function addCommentBt(){
+            addComment()
+            $("#chat-detail").val("");
+            $("#chat-detail").focus();
+        }
+
+        function printCommentsList(arr){
+            $("#comments_wrapper").html("");
+            for(var i=0;i<arr.length;i++){
+                var msg=arr[i].comment_content;
+                var author=arr[i].user_num;
+                author=(author=="1")? "익명": arr[i].nickname;
+                var writeDay=arr[i].regdate.substring(5,10);
+                var c=new Comments(document.getElementById("comments_wrapper"),msg,author,writeDay);
+            }
+        }
+        function chatLoop(){
+            getCommentsList()
+        }
+        $(function(){
+            getCommentsList()
+            $("#chat-detail").focus();
+            setInterval("chatLoop()",1000);
+        });
+    </script>
+</head>
+<body>
+    <%- include ('./inc/latte_top_navi')%>
+    <div id="wrapper">
+        <div id="chat-title">실시간 채팅</div>
+        <div id="chat-content">
+            <div style="width: 100%; height:550px;">
+                <div id="comments_wrapper" style="bottom: 0px;">
+
+                </div>
+            </div>
+            <div>
+                <form id="comment-form">
+                    <input type="text" id="chat-detail" maxlength="60" name="msg">
+                    <input type="hidden" name="board_id" value="1">
+                    <input type="hidden" name="user_num" value="<%=loginInfo.user_num%>">
+                    <input type="button" value="전송하기" onclick="addCommentBt()">
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include ('./inc/latte_footer')%>
+</body>
+</html>

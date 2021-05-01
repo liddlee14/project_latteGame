@@ -1,0 +1,156 @@
+<%
+var totalRecord=boardContent.length; //총 레코드 수
+var pageSize=12; //페이지당 보여질 레코드 수
+var totalPage=Math.ceil(totalRecord/pageSize); //공식
+var blockSize=10; //블럭당 보여질 페이지 수
+var currentPage = currentPage;//현재 페이지
+
+var firstPage=currentPage - (currentPage - 1)%blockSize; //블럭당 for문의 시작 페이지 
+var lastPage=firstPage + (blockSize - 1); //블럭당 for문의 마지막 페이지
+var curPos=(currentPage-1)*pageSize; //페이지당 데이터 배열의 시작 인덱스
+var num=totalRecord - curPos; //페이지당 시작 게시물 번호
+%>
+
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+  body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+
+  #freeBoard_wrapper{
+    height: 800px;
+    width: 1200px;
+    margin: auto;
+    position:relative;
+    box-sizing: border-box;
+  }
+
+  #freeBoard_title{
+    text-align: center;
+    font-family: 'Black Han Sans', sans-serif;
+    font-weight: 20;
+    color: rgb(235, 205, 171);
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 50px;
+    padding-top: 8px;
+    padding-bottom: 3px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  table {
+    border-spacing: 0;
+    width: 100%;
+    border: antiquewhite 1px solid;
+  }
+
+  th {
+    padding: 12px;
+    font-size: 29px;
+    font-family: 'Black Han Sans', sans-serif;
+    font-weight: 5;
+    color: rgb(235, 205, 171);
+    text-shadow: 2px 2px 4px #000000;
+    text-align: center;
+  }
+
+  td {
+    text-align: center;
+    padding: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 800;
+    background-color: antiquewhite;
+    opacity: 0.8;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  td a {
+    color: #814909;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  #freeboardButton{
+    float: right;
+    width: 85px;
+    height: 35px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid rgb(209, 163, 111);
+    border-radius: 13px;
+    background: rgb(236, 232, 227);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #814909;
+  }
+
+</style>
+  <script>
+    function writeboard(){
+      if (document.getElementById("noId")==null){
+        location.href='/writeboard'
+      }else{
+        alert("로그인 후 이용하세요")
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- 탑 네비게이션 -->
+  <%- include ('./inc/latte_top_navi')%>
+
+  <div id="freeBoard_wrapper">
+    <div id="freeBoard_title">자유게시판</div>
+    <table>
+      <tr>
+        <th style="width: 10%;">No.</th>
+        <th style="width: 50%;">Title</th>
+        <th style="width: 20%;">ID</th>
+        <th style="width: 20%;">Date</th>
+      </tr>
+      <%for (var a=(currentPage-1)*pageSize; a<(currentPage*pageSize); a++){%>
+      <%if(num<1){break;}; num--;var regdate=JSON.stringify(boardContent[a].regdate);%>
+      <tr onclick="location.href='/seecontent?board_id=<%=boardContent[a].board_id%>';">
+        <td><%=boardContent[a].board_id%></td>
+        <td><%=boardContent[a].title;%></td>
+        <td><%=boardContent[a].nickname;%></td>
+        <td><%=regdate.substring(6,11);%></td>
+      </tr>
+      <%}%>
+
+      <tr>
+        <td colspan="5" style="text-align:center">
+          <%if(firstPage-1 <1){%>
+          <a href="javascript:alert('이전 페이지가 없습니다');">◀</a>
+          <%}else{%>
+          <a href="/freeboard?currentPage=<%=firstPage-1%>">◀</a>    
+          <%}%>
+
+          <%for(var i=firstPage;i<=lastPage;i++){%>
+          <%if(i>totalPage)break;%>
+          <!-- pageNum  클래스는 현재 유저가 보고 있는 페이지의 경우만 a태그에 적용.. -->
+          <a href="/freeboard?currentPage=<%=i%>" <%if(i==currentPage){%>class="pageNum"<%}%> >[ <%=i%> ]</a>
+          <%}%>
+
+          <%if(lastPage+1>totalPage){%>
+          <a href="javascript:alert('다음 페이지가 없습니다');">▶</a>
+          <%}else{%>
+          <a href="/freeboard?currentPage=<%=lastPage+1%>">▶</a>
+          <%}%>
+          <button id="freeboardButton" onclick="writeboard()">글 등록</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <%- include ('./inc/latte_footer')%>
+</body>
+</html>

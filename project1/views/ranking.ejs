@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+</head>
+<style>
+body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+#wrapper{
+    width: 1200px;
+    height: 800px;
+    margin: auto;
+    position: relative;
+}
+#total{
+    width: 390px;
+    height: 100%;
+    float: left;
+    background: url("/johngame/images/party.jpg");
+    background-size: cover;
+    opacity: 0.8;
+    position: relative;
+    margin: auto;
+}
+#overallTitle{
+    font-size: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: bold;
+    color: rgb(235, 205, 171);
+    text-shadow: 2px 2px 4px #000;
+    text-align: center;
+    padding-top: 15px;
+}
+#medalOne input[type="text"]{
+    position: absolute;
+    background:none;
+    width: 100px;
+    top: 200px;
+    left: 43px;
+    color: #cccccc;
+    background: #000000;
+    text-align: center;
+}
+#medalTwo input[type="text"]{
+    position: absolute;
+    background:none;
+    width: 100px;
+    top: 150px;
+    left: 15px;
+    color: #cccccc;
+    background: #000000;
+    text-align: center;
+}
+#medalThree input[type="text"]{
+    position: absolute;
+    background:none;
+    width: 100px;
+    top: 100px;
+    color: #cccccc;
+    background: #000000;
+    text-align: center;
+}
+#medalOne{
+    width: 200px;
+    height: 200px;
+    background: url("/johngame/images/medal1.png");
+    background-size: cover;
+    margin: auto;
+    position: absolute;
+    left: 100px;
+    top: 80px;
+}
+#medalTwo{
+    width: 150px;
+    height: 150px;
+    background: url("/johngame/images/medal2.png");
+    background-size: cover;
+    margin: auto;
+    position: absolute;
+    left: 20px;
+    top: 360px;
+
+}
+#medalThree{
+    width: 100px;
+    height: 100px;
+    background: url("/johngame/images/medal3.png");
+    background-size: cover;
+    margin: auto;
+    position: absolute;
+    left: 250px;
+    top: 480px;
+}
+.oneranking{
+    /* background:url("/johngame/images/floor.jpg"); */
+    background-size: cover;
+    width: 810px;
+    height: 100%;
+    float: left;
+}
+#tower{
+    width: 330px;
+    height: 320px;
+    background:url("/johngame/images/tower.PNG");
+    background-size: cover;
+    /* opacity: 0.7; */
+    float: left;
+    margin: 4%;
+    border: solid 1px black;
+}
+#tail{
+    width: 330px;
+    height: 320px;
+    background:url("/johngame/images/tail.png");
+    background-size: cover;
+    float: left;
+    margin: 4%;
+    border: solid 1px black;
+}
+#dodge{
+    width: 330px;
+    height: 320px;
+    background:url("/johngame/images/dodge.PNG");
+    background-size: cover;
+    float: left;
+    margin: 4%;
+    border: solid 1px black;
+}
+#sky{
+    width: 330px;
+    height: 320px;
+    background:url("/johngame/images/sky.PNG");
+    background-size: cover;
+    /* opacity: 0.7; */
+    float: left;
+    margin: 4%;
+    border: solid 1px black;
+}
+#RankTitle{
+    text-align: center;
+    font-family: 'Black Han Sans', sans-serif;
+    color: #000;
+    text-shadow: 2px 2px 4px rgb(128, 79, 24);
+    font-weight: bold;
+    font-size: 30px;
+    background-color: antiquewhite;
+}
+table{
+    border-spacing: 0;
+    width: 100%;
+    border: antiquewhite 1px solid;
+}
+th {
+    padding: 8px;
+    font-size: 17px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: bold;
+    color: #000;
+    text-shadow: 2px 2px 4px rgb(128, 79, 24);
+    text-align: center;
+    background-color: antiquewhite;
+  }
+  td {
+    text-align: center;
+    padding: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: bold;
+    background-color: antiquewhite;
+    opacity: 0.7;
+  }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function getRank(n){
+        var postdata="queryNum="+n;
+        console.log(postdata);
+        $.ajax({
+            "type": "POST",
+            "url": "/getrank",
+            "success": function (result, status, xhr) {//200일때
+                console.log(result);
+            },
+            "data":postdata ,
+            "error": function () {
+            }
+        });
+    }
+var medalBArray = ["medal1b.png", "medal2b.png", "medal3b.png"];
+</script>
+<body>
+    <%- include ('./inc/latte_top_navi')%>
+    <div id="wrapper">
+        <div id="total">
+            <div id="overallTitle">명예의 전당</div>
+        </div>
+        <div id="medalOne">
+            <input type="text" disabled=true value="<%=totalrank[0].nickname%>">
+        </div>
+        <div id="medalTwo">
+            <input type="text" disabled=true value="<%=totalrank[1].nickname%>">
+        </div>
+        <div id="medalThree">
+            <input type="text" disabled=true value="<%=totalrank[2].nickname%>">
+        </div>
+        <div id="nextRanking">
+        </div>
+        <div class="oneranking">
+            <div id="tower" name="pro">
+                <div id="RankTitle">◤Coffee Tower◢</div>
+                <table>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Score</th>
+                        <th>ID</th>
+                    </tr>
+                    <%for (var i=0; i<5; i++){%>
+                    <tr>
+                        <td><%=rankArr[0][i].cd_rank%></td>
+                        <td><%=rankArr[0][i].score_cd%></td>
+                        <td><%=rankArr[0][i].nickname%></td>
+                    </tr>
+                    <%}%>
+                </table>
+            </div>
+            <div id="tail" name="pro">
+                <div id="RankTitle">◤Coffee Tail◢</div>
+                <table>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Score</th>
+                        <th>ID</th>
+                    </tr>
+                    <%for (var i=0; i<5; i++){%>
+                    <tr>
+                        <td><%=rankArr[1][i].ct_rank%></td>
+                        <td><%=rankArr[1][i].score_ct%></td>
+                        <td><%=rankArr[1][i].nickname%></td>
+                    </tr>
+                    <%}%>
+                </table>
+            </div>
+            <div id="dodge" name="pro">
+                <div id="RankTitle">◤Dodge It!◢</div>
+                <table>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Score</th>
+                        <th>ID</th>
+                    </tr>
+                    <%for (var i=0; i<5; i++){%>
+                    <tr>
+                        <td><%=rankArr[2][i].dg_rank%></td>
+                        <td><%=rankArr[2][i].score_dg%></td>
+                        <td><%=rankArr[2][i].nickname%></td>
+                    </tr>
+                    <%}%>
+                </table>
+            </div>
+            <div id="sky" name="pro">
+                <div id="RankTitle">◤Sky Coffee◢</div>
+                <table>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Score</th>
+                        <th>ID</th>
+                    </tr>
+                    <%for (var i=0; i<5; i++){%>
+                    <tr>
+                        <td><%=rankArr[3][i].sc_rank%></td>
+                        <td><%=rankArr[3][i].score_sc%></td>
+                        <td><%=rankArr[3][i].nickname%></td>
+                    </tr>
+                    <%}%>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+    <%- include ('./inc/latte_footer')%>
+</body>
+</html>

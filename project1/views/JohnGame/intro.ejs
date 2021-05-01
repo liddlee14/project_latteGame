@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+    body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+#wrapper{
+    background : url("/johngame/images/bg.png");
+    width: 1200px;
+    height: 800px;
+    border: 1px solid red;
+    margin: auto;
+    text-align: center;
+    box-sizing: border-box;
+}
+#wrapper h1{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-size: 120px;
+}
+#container{
+    height: 120px;
+}
+#wrapper p{
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: 50px;
+    display: none;
+}
+#wrapper button{
+    padding: 10px;
+}
+#tutorial{
+    width: 1200px;
+    height: 200px;
+    font-size: 25px;
+    font-size: -100;
+    font-family:'Noto Sans KR', sans-serif;
+    margin: auto;
+    color: blue;
+}
+</style>
+<script src="/johngame/js/howler.js"></script>
+<script>
+
+var flag=true;
+function init(){
+    document.getElementById("cutejohn").addEventListener("click",function(){
+        location.href="skycoffee/game";
+    });
+    var sound = new Howl({
+        src: ['/johngame/sound/Entire.mp3'],
+        autoplay: true,
+        loop: true,
+        volume: 0.3,
+        onend: function() {
+            console.log('Finished!');
+        }
+    });
+    sound.play();
+}
+function blink(){
+    var vision = (flag)? "none":"block";
+    document.querySelector("p").style.display=vision;
+    flag =! flag;
+}
+window.addEventListener("load", function(){
+    init();
+    setInterval("blink()",500);
+});
+</script>
+</head>
+<body>
+    <%- include ('../inc/latte_top_navi')%>
+    <div id="wrapper">
+        <h1>Sky Coffee</h1>
+        <div id="container">
+            <p>▼▼▼▼시작▼▼▼▼</p>
+        </div>
+        <button id="cutejohn">라떼한잔하러 가싈..?</button>
+        <div id="tutorial">
+            <b>키보드방향기<br>
+            <b>상 ↑</b><br>
+            <b>하 ↓</b><br>
+            <b>좌 ←</b><br>
+            <b>우 →</b><br>
+            <b>A</b>:공격 <br>
+            <b>2500점 달성시 Boss 출현!<br>
+            <b> ※Boss는 죽지않습니다..피하세욧!<br>
+        </div>
+    </div>
+    <%- include ('../inc/latte_footer')%>
+</body>
+</html>

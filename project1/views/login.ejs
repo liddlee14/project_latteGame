@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latt's:로그인</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+
+* {
+    box-sizing: border-box;
+}
+#loginWrapper{
+    width: 1200px;
+    height: 800px;
+    margin: auto;
+    position: relative;
+}
+
+/* style the container */
+.container {
+    position: relative;
+    border-radius: 5px;
+
+    padding: 20px 0 30px;
+    width: 600px;
+    top: 150px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+/* style inputs and link buttons */
+.btn,
+input {
+    width:500px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    margin: 5px 0;
+    opacity: 0.85;
+    display: inline-block;
+    font-size: 17px;
+    line-height: 20px;
+    text-decoration: none;
+    /* remove underline from anchors */
+}
+
+.btn:hover,
+input:hover {
+    opacity: 1;
+}
+
+
+/* 로그인 버튼 */
+input[type=button1] {
+    background-color: #1e29c2;
+    color: white;
+    cursor: pointer;
+}
+
+input[type=button1]:hover {
+    background-color: #1e29c2;
+}
+/* 회원가입 버튼 */
+input[type=button2] {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+input[type=button2]:hover {
+    background-color: #4CAF50;
+}
+
+/* Two-column layout */
+.col {
+    float: left;
+    width: 50%;
+    margin: auto;
+    padding: 0 50px;
+    margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* vertical line */
+.vl {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    border: 2px solid #ddd;
+    height: 175px;
+}
+
+/* text inside the vertical line */
+.vl-innertext {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    padding: 8px 10px;
+}
+
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(function(){
+
+}); 
+function loginCheck(){
+    $("form").attr({
+        action:"/login",
+        method:"post"
+    });
+    $("form").submit();//전송!!!
+}    
+</script>
+</head>
+<body>
+<%- include ('./inc/latte_top_navi')%>
+<div id="loginWrapper">
+    <div class="container">
+        <form>
+            <div class="row">
+                <h1 style="text-align:center">Latte's</h1>
+                <div class="col">
+                    <input type="hidden" name="latteUrl" value="<%=latteUrl%>">
+                    <input type="text" name="user_id" placeholder="Username" required="required">
+                    <input type="password" name="user_pass" placeholder="Password" required="required">
+                    <input type="button1" style="text-align:center" value="Login" onClick="loginCheck()">
+                    <input type="button2" style="text-align:center" value="회원가입" onClick="location.href='regist'">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="bottom-container">
+        <div class="row">
+            <div class="col">
+                <a href="#" style="color:white" class="btn"></a>
+            </div>
+        </div>
+    </div>
+</div>
+    <%- include ('./inc/latte_footer')%>
+</body>
+</html>

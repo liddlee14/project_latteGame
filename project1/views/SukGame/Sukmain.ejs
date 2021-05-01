@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+        input{
+            width: 25px;
+        }
+        #wrapper{
+            width: 1200px;
+            height: 800px;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.473);
+            margin: auto;
+        }
+        #content{
+            width: 1000px;
+            height: 100%;
+            position: relative;
+            float: left;
+        }
+        #side-bar{
+            width: 200px;
+            height: 100%;
+            position: relative;
+            float: left;
+        }
+        #rank-bar{
+            width: 200px;
+            height: 400px;
+            background-color: black;
+            position: relative;
+        }
+        #detail-div{
+            width: 200px;
+            height: 250px;
+            color: #cccccc;
+            background: url('/images/main/menu.jpg');
+            background-size: 100% 100%;
+            position: relative;
+        }
+        #control-div{
+            width: 200px;
+            height: 150px;
+            background: url("/SukGame/images/UI/window3.png");
+            background-size: 200px 200px;
+            background-position: 0px -30px;
+            position: relative;
+        }
+        #startBt,#startBtDis{
+            bottom: 5px;
+            left: 10px;
+            position: absolute;
+        }
+        #control-in input{
+            right: 25px;
+            width: 50px;
+            text-align: right;
+            position: absolute;
+        }
+        #control-in{
+            width: 100%;
+            left: 10px;
+            top: 25px;
+            color: blanchedalmond;
+            position: absolute;
+        }
+        #upgrade div{
+            width:23px;
+            height:30px;
+            position: absolute;
+        }
+        #upgradeSub1{
+            background: url("/SukGame/images/tower/tower1.png");
+            background-position: -37px -1px;
+        }
+        #upgradeSub2{
+            background: url("/SukGame/images/tower/tower2.png");
+            background-position: -37px -1px;
+        }
+        #upgradeSub3{
+            background: url("/SukGame/images/tower/tower3.png");
+            background-position: -37px -1px;
+        }
+        #upgradeSub4{
+            background: url("/SukGame/images/tower/tower4.png");
+            background-position: -37px -1px;
+        }
+        #upgrade button{
+            left:25px;
+            top:10px;
+            width: 60px;
+            position: absolute;
+        }
+        #upgrade{
+            top: 50px;
+            width: 100%;
+            position: absolute;
+        }
+        #upgrade1{
+            left:10px;
+            top:30px;
+            position: absolute;
+        }
+        #upgrade2{
+            right:70px;
+            top:30px;
+            position: absolute;
+        }
+        #upgrade3{
+            left:10px;
+            top:70px;
+            position: absolute;
+        }
+        #upgrade4{
+            right:70px;
+            top:70px;
+            position: absolute;
+        }
+        #aboutTower{
+            left: 10px;
+            top:200px;
+            position: absolute;
+        }
+        #stBt{
+            top:150px;
+            left: 50px;
+            position: absolute;
+        }
+        th{
+            font-size: 40px;
+            background-color: rgb(235, 205, 171);
+            text-align: center;
+            font-weight: bold;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #000;
+            text-shadow: 2px 2px 4px rgb(128, 79, 24);
+        }
+        tr{
+            font-family: 'Noto Sans KR', sans-serif;
+            color: whitesmoke;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
+    </style>
+    <script src="/SukGame/lib.js"></script>
+    <script src="/SukGame/howler.js"></script>
+    <script src="/SukGame/Super.js"></script>
+    <script src="/SukGame/tile.js"></script>
+    <script src="/SukGame/Bullet.js"></script>
+    <script src="/SukGame/Tower.js"></script>
+    <script src="/SukGame/CharMove.js"></script>
+    <script src="/SukGame/Enemy.js"></script>
+    <script src="/SukGame/TowerIdle.js"></script>
+
+    <script>        
+        //맵 관련
+        var tileArray=[];
+
+        //적 관련
+        var enemyArray=[];
+
+        //타워
+        var attUnitArr=[];
+        var bulletArr=[];
+
+        //디테일박스
+        var posInput;
+        var a=0;
+        var i=0;
+
+        //게임진행 세팅
+        let gameInterval;
+        var count=[0,80000,0];
+        var charCount=0;
+        var container;
+        var stage=-1;
+        var userHp=10;
+        var gold=200;
+        var score=0;
+
+        //버튼 활성화, 비 활성화
+        var stBtDisable;
+
+        var sound = new Howl({
+            src: ['/SukGame/sounds/Hyper.wav'],
+            autoplay: true,
+            loop: true,
+            volume: 0.3,
+            onend: function() {}
+        });
+
+        function init(){
+            sound.play();
+
+            towerBt=document.getElementById("towerBt");
+            container=document.getElementById("content");
+            testDiv=document.getElementById("buyer");
+            stBtDisable=document.getElementById("startBtDis");
+            posInput=document.getElementsByClassName("pos")
+            posInput[0].disabled=true;
+            posInput[1].disabled=true;
+            document.getElementById("towerBt").disabled=true;
+
+            createTile();
+            gameInterval=setInterval("gameLoop()",10);
+        }
+        //background 타일로 깔아주기
+        function createTile(){
+            for(var a=0;a<yTile;a++){
+                var arr=[];
+                for(var i=0;i<xTile;i++){
+                    //container,src,width,height,x,y
+                    var tile=new BgTiles(container,tileSrc[map[a][i]],75,75,12+(75*i),25+(75*a),a,i,map[a][i])
+                    arr[i]=tile;
+                }
+                tileArray[a]=arr;
+            }
+        }
+        function createBuyer(){
+                var buyer = new Buyer(container,actArry[stage%12][4],0,0,105,0,10,stage+1);
+                enemyArray.push(buyer);
+        }
+        function createTower(){
+            if(gold>=50){
+                a=posInput[0].value;
+                i=posInput[1].value;
+                var ranMum=getRandom(4);
+                var arr=tileArray[a][i];
+                var coffeeTower=new Tower(container,towerIdleArr[ranMum][4],parseInt(arr.div.style.left),parseInt(arr.div.style.top),100,50,ranMum);
+                attUnitArr.push(coffeeTower);
+                tileArray[a][i].index=3;
+                towerBt.disabled=true;
+                towerBt.innerText="건설불가";
+                gold-=50;
+            }
+        }
+
+        function gameLoop(){
+            // 남은체력
+            document.getElementById("stage").value=stage+1;
+            document.getElementById("userHp").value=userHp;
+            document.getElementById("userGold").value=gold;
+            document.getElementById("userScore").value=score;
+
+            //체력확인
+            if (userHp<1){
+                clearInterval(gameInterval);
+                sound.stop();
+                sound = new Howl({
+                    src: ['/SukGame/sounds/deaththeme.wav'],
+                    autoplay: true,
+                    loop: true,
+                    volume: 0.3,
+                    onend: function() {}
+                });
+                sound.play();
+                if(document.getElementById("noId")==null) {
+                    // 랭킹등록
+                    var xhttp = new XMLHttpRequest();//비동기 객체 생성
+                    //이벤트 처리
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            if (this.responseText == "notReach") {// 점수갱신 실패시 보이기
+                                if (confirm("Game Over \n 최고점수 갱신 실패 \n retry?")) {
+                                    location.reload();
+                                }
+                            } else {
+                                if (confirm("Game Over \n 최고점수 달성!!! \n retry?")) {
+                                    location.reload();
+                                }
+                            }
+                        }
+                    }
+                    xhttp.open("POST", "/updaterank", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    let postBody = "score=" + score + "&game=cd";
+                    xhttp.send(postBody);
+                }
+            }
+            //틱 시간 결정
+            if(count[0]%2==0){
+                for(var i=0;i<enemyArray.length;i++){
+                    enemyArray[i].render();
+                    enemyArray[i].tick();
+                    towerBt.disabled=true;
+                    towerBt.innerText="건설불가";
+                }
+            }
+            for(var i=0;i<bulletArr.length;i++){
+                bulletArr[i].render();
+                bulletArr[i].tick();
+            }
+
+            for(var i=0;i<attUnitArr.length;i++){
+                attUnitArr[i].attShot();
+            }
+
+            if(count[1]%100==0){
+                //적군생성
+                var counter=parseInt(count[1]/100);
+                if(counter<(10+stage)*1.2){
+                    createBuyer()
+                    stBtDisable.style.width=80+"px";
+                }else if(enemyArray.length==0){
+                    stBtDisable.style.width=0+"px";
+                }
+                //인풋박스체크
+                indexA=posInput[0].value;
+                indexI=posInput[1].value;
+            }
+            count[0]++
+            count[1]++
+        }
+
+        function stageStart(){
+            stage++;
+            count[1]=0;
+        }
+        window.addEventListener("load",function(){
+            init();
+            
+        });
+    </script>
+</head>
+<body>
+    <%- include ('../inc/latte_top_navi')%>
+    <div id="wrapper">
+    <div id="content"><div id="buyer"></div></div>
+    <div id="side-bar">
+        <div id="rank-bar">
+            <table>
+                <tr>
+                    <th colspan="3" style="text-align: center; width: 200px;" >전체랭킹</th>
+                </tr>
+                <%for(var i=0; i<7; i++){%>
+                <tr>
+                    <td><%=rankindex[i].cd_rank%></td>
+                    
+                    <td><%=rankindex[i].score_cd%></td>
+                </tr>
+                <%}%>
+            </table>
+        </div>
+        <div>
+            <div id="detail-div">
+                <div style="text-align: center;color: blanchedalmond;" id="upgrade">
+                    샷 추가
+                    <div id="upgrade1">
+                        <div id="upgradeSub1"></div>
+                        <button onclick="upgradeBul(this,0);">1000</button>
+                    </div>
+                    <div id="upgrade2">
+                        <div id="upgradeSub2"></div>
+                        <button onclick="upgradeBul(this,1);">1000</button>
+                    </div>
+                    <div id="upgrade3">
+                        <div id="upgradeSub3"></div>
+                        <button onclick="upgradeBul(this,2);">1000</button>
+                    </div>
+                    <div id="upgrade4">
+                        <div id="upgradeSub4"></div>
+                        <button onclick="upgradeBul(this,3);">1000</button>
+                    </div>
+                </div>
+                <div id="aboutTower">
+                    X: <input type="text" onchange="this.disabled=true;" class="pos">
+                    Y: <input type="text" onchange="this.disabled=true;" class="pos">
+                    <button onclick="createTower();" id="towerBt">랜덤타워</button>
+                </div>
+            </div>
+            <div id="control-div">
+                <div id="control-in">
+                    단계<input type="text" id="stage"><br>
+                    유보금<input type="text" id="userGold"><br>
+                    팔린 잔수<input type="text" id="userScore"><br>
+                    남은 커피머신 <input type="text" id="userHp"><br>
+                </div>
+                <div id="stBt">
+                    <img id="startBt" onclick="stageStart();" src="/SukGame/images/UI/start.png" width="80px" alt="">
+                    <img id="startBtDis" src="/SukGame/images/UI/starthold.png" width="0px" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <%- include ('../inc/latte_footer')%>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+
+    body {font-family: Arial, Helvetica, sans-serif; margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+    * {box-sizing: border-box;}
+    
+    #seecontWrapper{
+        width: 1200px;
+        height: 100%;
+        margin:auto;
+        overflow: hidden;
+    }
+    table{
+        width: 100%;
+        height: 70px;
+        background-color: rgb(224, 179, 120);
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 20px;
+    }
+
+    #seecontBody{
+        width: 100%;
+        height: 660px;
+        background-color: antiquewhite;
+        opacity: 0.8;
+        font-size: 20px;
+    }
+    #seecontButton{
+        width: 100%;
+        height: 70px;
+        background-color: rgb(224, 179, 120);
+        padding-left: 1030px;
+    }
+    #contButton {
+        margin-top: 10px;
+        background-color: rgb(189, 133, 66);
+        color: rgb(0, 0, 0);
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    #contButton:hover {
+        background: rgb(236, 232, 227);
+    }
+    #chat-content{
+        width: 1000px;
+        height: 100%;
+        color: white;
+        font-size: 16px;
+        font-family: 'Noto Sans KR', sans-serif;
+        text-align: center;
+    }
+    #chat-content div{
+        position: relative;
+    }
+    #chat-content input[type=button]{
+        display: inline-block;
+    }
+    #chat-detail{
+        width: 85%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+    .comment-list div{
+        display:inline-block; /*block속성(크기 가능)을 유지하되, 공존할수있슴*/
+        border:1px solid burlywood;
+    }
+</style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/Comments.js"></script>
+    <script>
+        function writeboard(){
+            if (document.getElementById("noId")==null){
+                location.href='/writeboard'
+            }else{
+                alert("로그인 후 이용하세요")
+            }
+        }
+        function addComment(){
+
+            //화면의 일부만 변경하기 위해(부분변경)서, 백그라운드에서 요청을 시도해 본다
+            var xhttp = new XMLHttpRequest();//비동기 객체 생성
+            //이벤트 처리
+            xhttp.onreadystatechange=function(){
+                if(this.readyState==4 && this.status==200){
+                    //서버에서 성공된 응답데이터가 온 시점이다!!
+                    var json=JSON.parse(this.responseText);
+                    if(json.result==0){
+                        alert("댓글 등록실패")
+                    }else{
+                        getCommentsList();
+                    }
+                }
+            }
+            xhttp.open("POST", "/comments/regist", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            let msg=$("input[name='msg']").val();//댓글 내용
+            let userNum=$("input[name='user_num']").val()
+            let board_id=$("input[name='board_id']").val()
+            var postBody="board_id="+board_id+"&msg="+msg+"&user_num="+userNum;
+            xhttp.send(postBody);
+        }
+
+        function getCommentsList(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange=function(){
+                if(this.readyState==4 && this.status==200){
+                    var json=JSON.parse(this.responseText);
+                    printCommentsList(json)
+                }
+            }
+            xhttp.open("get", "/comments/list?board_id="+$("input[name='board_id']").val(), true);
+            xhttp.send();
+        }
+        function addCommentBt(){
+            addComment()
+            $("#chat-detail").val("");
+            $("#chat-detail").focus();
+        }
+
+        function printCommentsList(arr){
+
+            $("#comments_wrapper").html("");
+            for(var i=14;i<24;i++){
+                var msg=arr[i].comment_content;
+                var author=arr[i].user_num;
+                author=(author=="1")? "익명": arr[i].nickname;
+                var writeDay=arr[i].regdate.substring(5,10);
+                var c=new Comments(document.getElementById("comments_wrapper"),msg,author,writeDay);
+            }
+        }
+        $(function (){
+            getCommentsList()
+        });
+    </script>
+</head>
+<body>
+    <!-- 탑 네비게이션 -->
+    <%- include ('./inc/latte_top_navi')%>
+
+    <div id="seecontWrapper">
+        <div id="seecontHeader">
+            <table>
+                <%var regdate=JSON.stringify(result[0].regdate)%>
+                <th style="width: 10%">index: <%=result[0].board_id%></th>
+                <th style="width: 50%;"><%=result[0].title%></th>
+                <th style="width: 20%;"><%=result[0].nickname%></th>
+                <th style="width: 20%;"><%=regdate.substring(6,11)%></th>
+            </table>
+        </div>
+        <div id="seecontBody" style="padding-left: 20px">
+            <br><%=result[0].board_content%>
+        </div>
+        <div id="seecontButton">
+            <button id="contButton" onclick="writeboard()">글쓰기</button>
+            <button id="contButton" onclick="location.href='/freeboard'">목록</button>
+        </div>
+        <div id="chat-content">
+            <div style="width: 100%; height:100%;">
+                <div id="comments_wrapper" style="bottom: 0px;">
+
+                </div>
+            </div>
+            <div>
+                <div style="width:200px;display: inline-block"></div>
+                <div style="width:100%;display: inline-block">
+                    <form id="comment-form">
+                        <input type="text" id="chat-detail" maxlength="60" name="msg">
+                        <input type="hidden" name="board_id" value="<%=result[0].board_id%>">
+                        <input type="hidden" name="user_num" value="<%=loginInfo.user_num%>">
+                        <input type="button" value="전송하기" onclick="addCommentBt()">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <%- include ('./inc/latte_footer')%>
+</body>
+</html>

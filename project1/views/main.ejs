@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>요한이와 라떼들</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+        #wrapper{
+            width: 1200px;
+            height: 800px;
+            margin: auto;
+            position: relative;
+        }
+        #screenshot{
+            width: 710px;
+            height: 570px;
+            top:45px;
+            left: 15px;
+            position: absolute;
+            background-color: ivory;
+        }
+        #menu-div{
+            width: 445px;
+            height: 570px;
+            top:45px;
+            right: 15px;
+            position: absolute;
+            background-color: ivory;
+        }
+        #content{
+            height: 630px;
+        }
+        #thum-div, #content{
+            width: 100%;
+        }
+        #thum-div div{
+            width: 25%;
+            height: 150px;
+            float: left;
+            padding-top: 50px;
+            text-align: center;
+            text-shadow: 2px 2px 4px antiquewhite;
+            font-family: 'Black Han Sans', sans-serif;
+            font-weight: 300;
+            font-size: 40px;
+            box-sizing: border-box;
+        }
+        #gameBt, #reviewBt{
+            width: 35%;
+            height: 65px;
+            bottom: 25px;
+            padding-top: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            position: absolute;
+            color: brown;
+            font-weight: bold;
+        }
+        #gameBt{left: 50px;}
+        #reviewBt{right: 50px;}
+        #menu-board{
+            top: 60px;
+            left: 50px;
+            width: 85%;
+            height: 400px;
+            position: absolute;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: bold;
+            font-size: 30px;
+            color: cornsilk;
+        }
+    </style>
+    <script>
+        var thumArr=[];
+        var thumBg=["url('/images/screenshot/sky.png')","url('/images/screenshot/dg.png')","url('/images/screenshot/ct.png')","url('/images/screenshot/cd.png')","url('/images/main/bt.png')","url('/images/main/bt.png')","url('/images/main/menu.jpg')","url('/images/screenshot/sky.png')"];
+        var screenshotArr=["url('/images/screenshot/sky.png')","url('/images/screenshot/dg.png')","url('/images/screenshot/ct.png')","url('/images/screenshot/cd.png')"];
+        var gameDetail=["\n김요한의 Coffee Sky~!\n커피 한잔의 여유..\n다들 가지고 계신가요?\n여러분들의 그 여유를\n투자하세요!\n\nPs : 게임은 여유가없음..",
+        "\n사방에서 쏟아지는\n\n커피콩을 피하고\n\n우유와 설탕을 모으자!",
+        "\n바쁜 생활속에 커피 한잔..\n은 무슨! 다 먹을꺼야!\n\n먹고 늘어나는 꼬리를 피해\n커피를 먹어보자!",
+        "\n\n몰려드는 손님들에게 \n 커피를 던져(?!)보자!!\n\n\n 머신이 고장나기전에 \n 손님을 처치(?!)하라!"
+        ];
+        var gameUrl=["/skycoffee",
+            "/dodgeit",
+            "/coffeetail",
+            "/cafedefence"
+        ];
+        var gameNumSet=0;
+
+        function refreshContent(n){
+            thumArr[7].style.background=screenshotArr[n];
+            thumArr[7].style.backgroundSize="100% 100%";
+            thumArr[8].innerText=gameDetail[n]
+            gameNumSet=n;
+        }
+        function gameMove(){
+            location.href=gameUrl[gameNumSet];
+        }
+        function init(){
+            thumArr.push(document.getElementById("thum1"));
+            thumArr.push(document.getElementById("thum2"));
+            thumArr.push(document.getElementById("thum3"));
+            thumArr.push(document.getElementById("thum4"));
+            thumArr.push(document.getElementById("gameBt"));
+            thumArr.push(document.getElementById("reviewBt"));
+            thumArr.push(document.getElementById("menu-div"));
+            thumArr.push(document.getElementById("screenshot"));
+            thumArr.push(document.getElementById("menu-board"));
+            bgButton();
+
+            // 썸네일 배경주기
+            for(var i=0;i<thumArr.length;i++){
+                thumArr[i].style.background=thumBg[i];
+                thumArr[i].style.backgroundSize="100% 100%";
+                
+            }
+            thumArr[8].innerText=gameDetail[0]
+        }
+
+        window.addEventListener("load",function(){
+            init();
+        })
+        function bgButton(){
+            document.getElementById("thum-div").style.cursor="pointer";
+            document.getElementById("gameBt").style.cursor="pointer";
+        }
+    </script>
+</head>
+<body>
+    <%- include ('./inc/latte_top_navi')%>
+    <div id="wrapper">
+        <div id="content">
+            <div id="screenshot"></div>
+            <div id="menu-div">
+                <div id="menu-board"></div>
+                <div id="gameBt" onclick="gameMove()">게임 하러 가기</div>
+                <div id="reviewBt">리뷰 보러 가기</div>
+            </div>
+        </div>
+        <div id="thum-div">
+            <div id="thum1" onclick="refreshContent(0)">Coffee Sky</div>
+            <div id="thum2" onclick="refreshContent(1)">Dodge It!</div>
+            <div id="thum3" onclick="refreshContent(2)">Coffee Tail</div>
+            <div id="thum4" onclick="refreshContent(3)">Cafe Defence</div>
+        </div>
+    </div>
+    <%- include ('./inc/latte_footer')%>
+</body>
+</html>

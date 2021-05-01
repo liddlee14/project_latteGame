@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+
+#wrapper{
+    width:1200px;
+    height:800px;
+    border:5px solid whitesmoke;
+    margin: auto;
+    text-align: center;
+} 
+#wrapper h1{
+    text-align:center;
+    color:#FFFFFF;
+    font-weight: bold;
+    font-size:70px;
+}
+#container{
+    height:120px;
+}
+#container p{
+    text-align: center;
+    color:yellowgreen;
+    font-weight: bold;
+    font-size:35px;
+    display:none;  /*  none:안보임   block:보임*/
+}
+#wrapper button{
+    padding:10px;
+
+}
+</style>
+<script>    
+var flag=true;
+function init(){
+    document.getElementById("goInGame").addEventListener("click" , function(){
+        //메인 페이지로 링크!!
+        //a 태그를 자바스크립트로 표현한 것이 location.href 
+        location.href="coffeetail/game";
+    });
+}
+
+//깜빡거리는 효과
+function blink(){
+    var vision = (flag)? "none":"block";
+    document.querySelector("p").style.display= vision;
+    flag=!flag;
+}
+window.addEventListener("load", function(){
+    init();
+    setInterval("blink()",500);
+});
+</script>
+</head>
+<body>
+    <%- include ('../inc/latte_top_navi')%>
+    <div id="wrapper">
+        <br><br><br><br><br>
+        <h1>COFFEE TAIL</h1>
+        <div id="container">
+            <br><br>
+            <p>INSERT COIN</p>
+        </div>
+        <br><br><br><br>
+        <button id="goInGame">Game Start</button><br><br>
+        <b style="color:#EEE8AA">키보드방향기<br>
+            <b style="color:#EEE8AA">상 ↑ 하 ↓ 좌 ← 우 →</b>
+    </div>    
+    <%- include ('../inc/latte_footer')%>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sky">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/static/johngame/images/sky.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

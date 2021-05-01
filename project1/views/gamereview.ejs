@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요한이와 라떼들</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+    body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+    #wrapper{
+        width: 1200px;
+        height: 800px;
+        box-sizing: border-box;
+        margin: auto;
+        position: relative;
+    }
+    #chat-title{
+        width: 600px;
+        height: 70px;
+        background : none;
+        font-size: 80px;
+        font-family: 'Black Han Sans', sans-serif;
+        font-weight: 300;
+        text-align: center;
+        text-decoration : underline;
+        text-shadow: 2px 2px 4px antiquewhite;
+        display:inline-block;
+        top: 10px;
+        left: 300px;
+        position: absolute;
+    }
+    #gameTatle{
+        position: absolute;
+        display:inline-block;
+    }
+    #chat-content{
+        width: 1000px;
+        height: 620px;
+        top: 110px;
+        left: 100px;
+        color: white;
+        font-size: 16px;
+        font-family: 'Noto Sans KR', sans-serif;
+        position: absolute;
+    }
+    #chat-content div{
+        position: relative;
+    }
+    #chat-content input[type=button]{
+        position: absolute;
+        left: 887px;
+        top: 660px;
+        display: inline-block;
+    }
+    #chat-detail{
+        width: 87%;
+        top: 650px;
+        padding: 7px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+        position: absolute;
+    }
+    .comment-list div{
+        display:inline-block; /*block속성(크기 가능)을 유지하되, 공존할수있슴*/
+        border:1px solid burlywood;
+    }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/js/Comments.js"></script>
+<script>
+    var review_list="1";
+    function addComment(){
+        var xhttp = new XMLHttpRequest();//비동기 객체 생성 
+        //이벤트 처리 
+        xhttp.onreadystatechange=function(){
+            if(this.readyState==4 && this.status==200){
+            //서버에서 성공된 응답데이터가 온 시점이다!!
+                var json=JSON.parse(this.responseText);
+                if(json.result==0){
+                    alert("댓글 등록실패")
+                }else{
+                    getCommentsList(document.getElementById("gameTitle").value);
+                }
+            }     
+        }
+        xhttp.open("POST", "/comments/regist", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        console.log();
+        var msg=$("input[name='msg']").val();//댓글 내용
+        // var author=$("input[name='author']").val();//댓글 작성자
+        var postBody="board_id="+document.getElementById("gameTitle").value+"&msg="+msg+"&user_num=1";
+        xhttp.send(postBody);
+    }
+
+    function getCommentsList(nn){
+        review_list=nn;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange=function(){
+            if(this.readyState==4 && this.status==200){
+                var json=JSON.parse(this.responseText);
+                printCommentsList(json);
+            }
+        }
+        xhttp.open("get", "/comments/list?board_id="+review_list, true);
+        xhttp.send();
+    }
+    function addCommentBt(){
+        addComment();
+        $("#chat-detail").val("");
+        $("#chat-detail").focus();
+    }
+
+    function printCommentsList(arr){
+        $("#comments_wrapper").html("");
+        for(var i=0;i<arr.length;i++){           
+            var msg=arr[i].comment_content;
+            var author=arr[i].user_num;
+            author=(author=="1")? "익명": author;
+            var writeDay=arr[i].regdate.substring(5,10);
+            var c=new Comments(document.getElementById("comments_wrapper"),msg,author,writeDay);
+        }
+    }
+    function chatLoop(){
+        getCommentsList();
+    }
+    $(function(){
+        getCommentsList(review_list);
+        $("#chat-detail").focus();
+        setInterval("chatLoop()",1000);
+});
+
+</script>
+</head>
+<body>
+<%- include ('./inc/latte_top_navi')%>
+<form id="commentForm">
+    <div id="wrapper">
+        <div id="chat-title">Game Review</div>
+        <div id="chat-content">
+            <div style="width: 100%; height:550px;">
+                <select id="gameTitle" name="gameTitle" onChange="getCommentsList(this.value)">
+                    <option value="2">Game&nbsp; Choice</option>
+                    <option value="3">Cafe&nbsp;Defence</option>
+                    <option value="4">Coffee&nbsp;Tail</option>
+                    <option value="5">Dodge&nbsp;It!</option>
+                    <option value="6">Sky&nbsp;Coffee</option>
+                </select>              
+                <div id="comments_wrapper" style="bottom: 0px;"></div>
+                <input type="text" id="chat-detail" maxlength="60" name="msg">
+                <input type="hidden" name="board_id" value="1">
+                <input type="hidden" name="user_num" value="1">
+                <input type="button" id="trBt" value="전송하기" onclick="addCommentBt()">
+            </div>
+        </div>
+    </div>
+</form>
+<%- include ('./inc/latte_footer')%>
+</body>
+</html>

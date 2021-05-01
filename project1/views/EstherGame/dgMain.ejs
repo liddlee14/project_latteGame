@@ -1,0 +1,268 @@
+<!-- 
+===============================
+Abstraction(Ludum Dare 28 - Track 2) - Music Loop Bundle
+http://abstractionmusic.bandcamp.com
+=============================== 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+    body {
+        background-image: url("/images/bg/bodyBg.jpg");
+        background-size: cover;
+        margin: 0px;
+    }
+
+    #wrapper {
+        width: 1200px;
+        height: 800px;
+        background-color: cadetblue;
+        margin: auto;
+        /* border: white solid 2px; */
+        position: relative;
+        overflow: hidden;
+    }
+
+    #mainPage {
+        background: url("/EstherGame/image/beanBg.png");
+        background-size: cover;
+        float: left;
+        overflow: hidden;
+    }
+
+    #scorePage {
+        width: 200px;
+        height: 100%;
+        background-color: black;
+        float: left;
+    }
+
+    #scoreTitle {
+        width: 100%;
+        height: 50px;
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        color: #000;
+        text-shadow: 2px 2px 4px rgb(128, 79, 24);
+        font-family: 'Noto Sans KR', sans-serif;
+        background-color: rgb(235, 205, 171);
+        padding-bottom: 10px;
+    }
+
+    #scoreNum {
+        width: 100%;
+        height: 340px;
+        font-size: 50px;
+        font-weight: bold;
+        text-align: center;
+        color: white;
+    }
+
+    #scoreRank {
+        width: 100%;
+        height: 400px;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        color: whitesmoke;
+    }
+    th{
+        font-size: 40px;
+        background-color: rgb(235, 205, 171);
+        text-align: center;
+        font-weight: bold;
+        font-family: 'Noto Sans KR', sans-serif;
+        color: #000;
+        text-shadow: 2px 2px 4px rgb(128, 79, 24);
+    }
+    tr{
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+</style>
+<script src="/EstherGame/js/howler.js"></script>
+<script src="/EstherGame/js/Latte.js"></script>
+<script src="/EstherGame/js/Bean.js"></script>
+<script src="/EstherGame/js/lib.js"></script>
+<script src="/EstherGame/js/Item.js"></script>
+<script>
+    var mainPage;
+    var latte;
+    var latteArray=[];
+    var speed=2;
+    var beanArray=[];
+    var beanSrc=["coffeebean1.png", "coffeebean2.png", "coffeebean3.png"]
+    var count=0;
+    var item;
+    var item2;
+    var itemArray=[];
+    var itemArray2=[];
+    var itemSrc=["milk.png", "sugar.png"];
+    var score=0;
+    var loopFlag=true;
+
+
+    //메인 케릭터
+    function gameHero(){
+        // constructor(container, src, width, height, x, y, velX, velY)
+        latte = new Latte(mainPage,"/EstherGame/image/snail2.png", 60, 60, 500, 350, 0, 0 );
+        latteArray.push(latte);
+    }
+
+    // 적(장애물)
+    function gameEnemy(){
+        var fireDirection = getRandom(6)-getRandom(7);
+        var velPlus = getRandom(6);
+        var velMinus = getRandom(-6);
+
+        // constructor(container, src, width, height, x, y, velX, velY)
+        var beanRight = new Bean(mainPage, "/EstherGame/image/"+beanSrc[0], 30, 30, (parseInt(mainPage.style.width)-30), getRandom(800), velMinus, fireDirection);
+        var beanFloor = new Bean(mainPage, "/EstherGame/image/"+beanSrc[1], 30, 30, getRandom(1000), parseInt(mainPage.style.height), fireDirection, velMinus);
+        var beanLeft = new Bean(mainPage, "/EstherGame/image/"+beanSrc[2], 30, 30, 0, getRandom(800), velPlus, fireDirection);
+        var beanTop = new Bean(mainPage, "/EstherGame/image/"+beanSrc[0], 30, 30, getRandom(1000), 0, fireDirection, velPlus);
+
+        beanArray.push(beanRight);
+        beanArray.push(beanFloor);
+        beanArray.push(beanLeft);
+        beanArray.push(beanTop);
+    }
+
+    // 아이템(우유 - 10점)
+    function gameItem1(){
+        // constructor(container, src, width, height, x, y)
+        item = new Item(mainPage, "/EstherGame/image/"+itemSrc[0], 50, 50, getRandom(950), getRandom(750));
+        itemArray.push(item);
+    } 
+
+    // 아이템(설탕 - 5점)
+    function gameItem2(){
+        // constructor(container, src, width, height, x, y)
+        item2 = new Item(mainPage, "/EstherGame/image/"+itemSrc[1], 50, 50, getRandom(950), getRandom(750));
+        itemArray2.push(item2);
+    } 
+
+    // 키보드 제어
+    function pressDown(){
+        var key = event.keyCode;
+        // console.log("key code is", key);
+
+        switch(key){
+            case 39: latte.velX=speed; break;
+            case 37: latte.velX=-speed; break;
+            case 40: latte.velY=speed; break;
+            case 38: latte.velY=-speed; break;
+            case 27:loopFlag=!loopFlag; break;
+        } 
+        latte.tick();
+        latte.render();
+    }
+
+    // 점수판
+    function printScore(){
+        scoreNum.innerText=score+"점";
+    }
+
+    //게임 루프
+    function gameLoop(){
+        if(loopFlag){
+            latte.tick();
+            latte.render();
+
+            // 장애물 등장 속도
+            for(var i=0; i<beanArray.length; i++){
+                beanArray[i].render();
+                beanArray[i].tick();
+            } if(count%180==0){
+                gameEnemy();
+            }
+            count++;
+
+            // 아이템1 등장 속도
+            for(var i=0; i<itemArray.length; i++){
+                itemArray[i];
+            } if(count%550==0){
+                gameItem1();
+            } 
+
+            // 아이템2 등장 속도
+            for(var i=0; i<itemArray2.length; i++){
+                itemArray2[i];
+            } if(count%300==0){
+                gameItem2();
+            } 
+        }
+    } 
+
+    function init(){
+        mainPage = document.getElementById("mainPage");
+        mainPage.style.width=1000+"px"; //동적으로 받아 프로그램적으로 제어할 수 있도록
+        mainPage.style.height=800+"px";
+        mainPage.style.overflow="hidden";
+
+        gameHero();
+        gameEnemy();
+        gameItem1();
+        gameItem2();
+
+        document.body.addEventListener("keydown", function(){
+            pressDown();
+        });
+
+        // 배경 음악
+        var sound = new Howl({
+            src: ['/EstherGame/music/bgMusic.wav'],
+            autoplay: false,
+            loop: true,
+            volume: 0.5,
+        });
+        sound.play();
+    }
+
+
+    window.addEventListener("load", function(){
+        init();
+        setInterval("gameLoop()", 10);
+    });
+</script>
+
+</head>
+<%- include ('../inc/latte_top_navi')%>
+<body>
+    <div id="wrapper">
+        <div id="mainPage"></div>
+        <div id="scorePage">
+            <div id="scoreTitle">Score:</div>
+            <div id="scoreNum"></div>
+            <div id="scoreRank">
+                <div id="scoreRankContent">
+                    <table>
+                        <tr>
+                            <th colspan="3" style="text-align: center; width: 200px;" >전체랭킹</th>
+                        </tr>
+                        <%for(var i=0; i<7; i++){%>
+                        <tr>
+                            <td><%=rankindex[i].dg_rank%></td>
+                            <td><%=rankindex[i].score_dg%></td>
+                        </tr>
+                        <%}%>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div>Icons made by <a href="https://www.flaticon.com/authors/pause08" title="Pause08">Pause08</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> //sugarcube
+        <a href="https://www.freepik.com/vectors/coffee">Coffee vector created by macrovector - www.freepik.com</a> //latte cup
+        <a href="https://www.freepik.com/vectors/coffee">Coffee vector created by macrovector - www.freepik.com</a> //latte snail
+        <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> //milk
+    </div>
+    <%- include ('../inc/latte_footer')%>
+</body>
+</html>

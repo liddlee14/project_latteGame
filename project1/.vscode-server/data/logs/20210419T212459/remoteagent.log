@@ -1,0 +1,38 @@
+[2021-04-19 21:25:00.369] [remoteagent] [info] 
+
+*
+* Visual Studio Code Server
+*
+* Reminder: You may only use this software with Visual Studio family products,
+* as described in the license https://aka.ms/vscode-remote/license
+*
+
+
+[2021-04-19 21:25:00.369] [remoteagent] [info] Extension host agent started.
+[2021-04-19 21:25:00.827] [remoteagent] [info] [127.0.0.1][bd093e07][ExtensionHostConnection] New connection established.
+[2021-04-19 21:25:00.829] [remoteagent] [info] [127.0.0.1][bdd1df51][ManagementConnection] New connection established.
+[2021-04-19 21:25:01.706] [remoteagent] [info] [127.0.0.1][bd093e07][ExtensionHostConnection] <18764> Launched Extension Host Process.
+[2021-04-19 21:25:07.605] [remoteagent] [info] [127.0.0.1][bdd1df51][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+[2021-04-19 21:25:08.879] [remoteagent] [info] [127.0.0.1][bd093e07][ExtensionHostConnection] <18764> Extension Host Process exited with code: 0, signal: null.
+[2021-04-19 21:25:08.881] [remoteagent] [info] Last EH closed, waiting before shutting down
+[2021-04-19 21:25:17.579] [remoteagent] [info] Got delay-shutdown request while in shutdown timeout, delaying
+[2021-04-19 21:25:17.579] [remoteagent] [info] Cancelling previous shutdown timeout
+[2021-04-19 21:25:17.687] [remoteagent] [info] [127.0.0.1][1ee034e0][ManagementConnection] New connection established.
+[2021-04-19 21:25:17.756] [remoteagent] [info] [127.0.0.1][b2b1f799][ExtensionHostConnection] New connection established.
+[2021-04-19 21:25:17.841] [remoteagent] [info] [127.0.0.1][b2b1f799][ExtensionHostConnection] <18853> Launched Extension Host Process.
+[2021-04-19 21:25:43.076] [remoteagent] [info] [127.0.0.1][b2b1f799][ExtensionHostConnection] The client has reconnected.
+[2021-04-19 21:29:59.181] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:31:54.673] [remoteagent] [info] New EH opened, aborting shutdown
+[2021-04-19 21:33:01.512] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:36:34.415] [remoteagent] [info] [127.0.0.1][1ee034e0][ManagementConnection] The client has disconnected, will wait for reconnection 3h before disposing...
+[2021-04-19 21:36:34.417] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:40:21.905] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:41:01.928] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:42:53.395] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:44:00.934] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:45:31.341] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:47:11.798] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-19 21:50:13.574] [remoteagent] [warning] No ptyHost heartbeat after 6 seconds
+[2021-04-20 00:31:22.684] [remoteagent] [info] [127.0.0.1][b2b1f799][ExtensionHostConnection] <18853> Extension Host Process exited with code: 0, signal: null.
+[2021-04-20 00:31:22.685] [remoteagent] [info] Last EH closed, waiting before shutting down
+[2021-04-20 00:36:22.690] [remoteagent] [info] Last EH closed, shutting down

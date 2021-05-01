@@ -1,0 +1,130 @@
+<%
+var pageSize=12; //페이지당 보여질 레코드 수
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<style>
+    body{margin: 0px; background: url('/images/bg/bodyBg.jpg');background-size: cover;}
+
+
+    #comments_wrapper{
+        height: 800px;
+        width: 1200px;
+        margin: auto;
+        position:relative;
+        box-sizing: border-box;
+    }
+
+    table {
+        margin-top: 15px;
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        border: antiquewhite 1px solid;
+    }
+
+    th{
+        padding: 17px;
+        font-size: 40px;
+        font-family: 'Black Han Sans', sans-serif;
+        font-weight: 20;
+        color: rgb(235, 205, 171);
+        text-shadow: 2px 2px 4px #000000;
+    }
+
+    td {
+        text-align: left;
+        padding: 15.5px;
+        color: aliceblue;
+        font-family: 'Noto Sans KR', sans-serif;
+        border: antiquewhite 1px solid;
+        font-size: 18px;
+        /* font-style: italic; */
+    }
+
+    input[type=text]{
+        width: 85%;
+        height: 38px;
+        margin: 0px 0 0px 0;
+        display: inline-block;
+        border: 2px solid rgb(209, 163, 111);
+        border-radius: 15px;
+        background: rgb(236, 232, 227)
+    }
+
+    input[type=button]{
+        width: 85px;
+        height: 40px;
+        font-size: 15px;
+        font-weight: bold;
+        border: 2px solid rgb(209, 163, 111);
+        border-radius: 13px;
+        background: rgb(236, 232, 227);
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function addComment(){
+            var msg=$("input[name='msg']").val();//댓글 내용
+            var userNum=$("input[name='user_num']").val();//댓글 내용
+            var postBody="board_id=2&msg="+msg+"&user_num="+userNum;
+            $.ajax({
+                    "type":"POST",
+                    "url":"/comments/regist",
+                    "success":function(result,status,xhr){//200일때
+                        // alert(result.result.length);
+                        location.reload();
+                    },
+                    "data":postBody,
+                    "error":function(){//200일때
+                    }
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- 탑 네비게이션 -->
+    <%- include ('./inc/latte_top_navi')%>
+    <div id="wrapperSpacing"></div>
+    <div id="comments_wrapper">
+        <table>
+            <tr>
+              <th style="width: 70%;">끝말잇기</th>
+              <th style="width: 15%;">ID</th>
+              <th style="width: 15%;">Date</th>
+            </tr>
+            <%for(var i=0;i<result.length;i++){%>
+                <%var author=result[i].user_num;
+                author=(author=="1")? "익명": result[i].nickname;%>
+            <tr>
+                <td style="width: 70%;"><%=result[i].comment_content%></td>
+                <td style="width: 15%;"><%=author%></td>
+                <td style="width: 15%;"><%=result[i].regdate.substring(5,10);%></td>
+            </tr>
+            <%}%> 
+            <tr>
+                <td colspan="3">
+                    <form id="comment-form">
+                        <input type="text" id="chat-detail" maxlength="60" name="msg">
+                        <input type="hidden" name="board_id" value="2">
+                        <input type="hidden" name="user_num" value="<%=loginInfo.user_num%>">
+                        <input type="button" value="전송하기" onclick="addComment()" >
+                    </form>
+                </td>
+            </tr>
+          </table>
+    </div>
+
+    <!-- Footer -->
+    <%- include ('./inc/latte_footer')%>
+</body>
+</html>
